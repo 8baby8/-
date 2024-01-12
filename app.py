@@ -12,10 +12,10 @@ from langchain.chains import RetrievalQA
 def load_chain():
     # 加载问答链
     # 定义 Embeddings
-    embeddings = HuggingFaceEmbeddings(model_name="/root/data/model/sentence-transformer")
+    embeddings = HuggingFaceEmbeddings(model_name="model/sentence-transformer")
 
     # 向量数据库持久化路径
-    persist_directory = 'data_base/vector_db/chroma'
+    persist_directory = 'vector_db/chroma'
 
     # 加载数据库
     vectordb = Chroma(
@@ -24,7 +24,7 @@ def load_chain():
     )
 
     # 加载自定义 LLM
-    llm = InternLM_LLM(model_path = "/root/data/model/Shanghai_AI_Laboratory/internlm-chat-7b")
+    llm = InternLM_LLM(model_path = "model/Shanghai_AI_Laboratory/internlm-chat-7b")
 
     # 定义一个 Prompt Template
     template = """使用以下上下文来回答最后的问题。如果你不知道答案，就说你不知道，不要试图编造答
@@ -35,10 +35,12 @@ def load_chain():
 
     QA_CHAIN_PROMPT = PromptTemplate(input_variables=["context","question"],template=template)
 
-    # 运行 chain
-    qa_chain = RetrievalQA.from_chain_type(llm,retriever=vectordb.as_retriever(),return_source_documents=True,chain_type_kwargs={"prompt":QA_CHAIN_PROMPT})
-    
-    return qa_chain
+    return RetrievalQA.from_chain_type(
+        llm,
+        retriever=vectordb.as_retriever(),
+        return_source_documents=True,
+        chain_type_kwargs={"prompt": QA_CHAIN_PROMPT},
+    )
 
 
 class Model_center():
@@ -53,7 +55,7 @@ class Model_center():
         """
         调用问答链进行回答
         """
-        if question == None or len(question) < 1:
+        if question is None or not question:
             return "", chat_history
         try:
             chat_history.append(

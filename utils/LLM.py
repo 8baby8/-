@@ -7,10 +7,10 @@ import torch
 from modelscope import snapshot_download
 import os
 if not os.path.exists('Shanghai_AI_Laboratory/internlm-chat-7b'):  
-    model_dir = snapshot_download('Shanghai_AI_Laboratory/internlm-chat-7b', revision='v1.0.3')
+    model_dir = snapshot_download('Shanghai_AI_Laboratory/internlm-chat-7b',cache_dir='model', revision='v1.0.3')
     print("模型下载完成, 保存在：", model_dir)
 else:
-    model_dir = 'Shanghai_AI_Laboratory/internlm-chat-7b'
+    model_dir = 'model/Shanghai_AI_Laboratory/internlm-chat-7b'
     print("模型已存在")
 
 class InternLM_LLM(LLM):

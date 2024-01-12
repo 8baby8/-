@@ -3,7 +3,7 @@ python -m pip install --upgrade pip
 
 # 下载模型
 # 定义本地目录和文件名  
-local_dir="/root/data/model/sentence-transformer"  
+local_dir="model/sentence-transformer"  
 model_name="paraphrase-multilingual-MiniLM-L12-v2"  
   
 # 检查本地文件是否存在  
